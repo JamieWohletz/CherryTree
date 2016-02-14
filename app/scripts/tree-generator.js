@@ -39,7 +39,7 @@ const generateTree =
     if(numLevels === 1) {
       return Immutable({children: generateChildNodes(() => { return {} })});
     }
-    return Immutable({children: generateChildNodes(() => { return generateTree(numLevels - 1)})});
+    return Immutable({children: generateChildNodes(() => { return generateNakedTree(numLevels - 1)})});
   }
 
 
