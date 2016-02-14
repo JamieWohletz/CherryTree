@@ -7,7 +7,9 @@ var root = {
     y: Math.ceil($(window).height())
   },
   children: [
-    generateTree(8)
+    treegen.core.generate_tree(8)
   ]
 };
 renderTree(root);
+
+//console.log(treegen.core.rand_num_in_range(0, 100));

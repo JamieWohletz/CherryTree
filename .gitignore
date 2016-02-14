@@ -5,3 +5,6 @@ dist
 bower_components
 test/bower_components
 .idea
+app/out
+target
+figwheel_server.log

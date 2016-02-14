@@ -8,7 +8,7 @@ const generateTree =
 
   var maxNumChildNodes = 3;
   var maxLengthDifference = 0.2;
-  var maxThicknessDifference = 0.3;
+  var maxThicknessDifference = 0.01;
   var angleArcRange = 180;
 
   function getRandomNumberInRange(start, end) {
