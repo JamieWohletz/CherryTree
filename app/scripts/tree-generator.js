@@ -64,7 +64,7 @@ const generateTree =
       });
   }
 
-  function addThicknessToTree(tree, rootThickness = 1) {
+  function addThicknessToTree(tree, rootThickness = (RENDER.VIEWBOX_WIDTH/10)) {
     return addVaryingPropertyToTree(tree, "thickness", rootThickness,
       (parentThickness, numChildren) => {
         return sliceIntoRandomParts(parentThickness, numChildren);
