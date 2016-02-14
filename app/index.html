@@ -26,10 +26,8 @@
     <!--[if lt IE 10]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    
-    <div class="container">
-      <svg id="tree-container"></svg>
-    </div>
+
+    <svg id="tree-container"></svg>
     
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
@@ -45,7 +43,7 @@
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/lodash/lodash.js"></script>
-    <script src="/bower_components/immutable/dist/immutable.js"></script>
+    <script src="/bower_components/svg.js/dist/svg.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     
@@ -65,6 +63,7 @@
     <!-- endbuild -->
     
     <!-- build:js scripts/main.js -->
+    <script src="scripts/rendering-engine.js"></script>
     <script src="scripts/main.js"></script>
     <!-- endbuild -->
   </body>
