@@ -39,7 +39,7 @@ const generateTree =
     if(numLevels === 1) {
       return Immutable({children: generateChildNodes(() => { return {} })});
     }
-    return Immutable({children: generateChildNodes(() => { return generateTree(numLevels - 1)})});
+    return Immutable({children: generateChildNodes(() => { return generateNakedTree(numLevels - 1)})});
   }
 
 
@@ -64,7 +64,7 @@ const generateTree =
       });
   }
 
-  function addThicknessToTree(tree, rootThickness = 1) {
+  function addThicknessToTree(tree, rootThickness = (RENDER.VIEWBOX_WIDTH/10)) {
     return addVaryingPropertyToTree(tree, "thickness", rootThickness,
       (parentThickness, numChildren) => {
         return sliceIntoRandomParts(parentThickness, numChildren);

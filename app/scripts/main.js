@@ -1,13 +1,11 @@
 var root = {
-  length:0.3,
   angle: Math.PI / 2,
-  thickness:0.5,
   coordinates: {
-    x: Math.floor($(window).width() / 2),
-    y: Math.ceil($(window).height())
+    x: RENDER.VIEWBOX_WIDTH/2,
+    y: RENDER.VIEWBOX_HEIGHT
   },
   children: [
-    generateTree(8)
+    generateTree(10)
   ]
 };
 renderTree(root);
