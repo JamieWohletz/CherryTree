@@ -64,17 +64,17 @@ const generateTree =
       });
   }
 
-  function addThicknessToTree(tree, rootThickness = (RENDER.VIEWBOX_WIDTH/10)) {
+  function addThicknessToTree(tree, rootThickness = 1/RENDER.X_SCALE) {
     return addVaryingPropertyToTree(tree, "thickness", rootThickness,
       (parentThickness, numChildren) => {
         return sliceIntoRandomParts(parentThickness, numChildren);
       });
   }
 
-  function addAngleToTree(tree, rootAngle = Math.PI / 2) {
+  function addAngleToTree(tree, rootAngle = 0) {
     return addVaryingPropertyToTree(tree, "angle", rootAngle,
       (parentAngle, numChildren) => {
-        return _.times(numChildren, () => { return getRandomNumberInRange(0, Math.PI) });
+        return _.times(numChildren, () => { return getRandomNumberInRange(0, Math.PI/6) });
       });
   }
 
