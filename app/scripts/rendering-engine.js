@@ -1,10 +1,13 @@
 /**
  * Created by Jamie Wohletz on 2/13/2016.
  */
+const renderTree =
 (function(){
   const draw = SVG('tree-container'),
     WINDOW_HEIGHT = $(window).height(),
-    WINDOW_WIDTH = $(window).width();
+    WINDOW_WIDTH = $(window).width(),
+    SCALE_X = 30,
+    SCALE_Y = 5;
 
   function deltaX(hypotenuse, angle) {
     return Math.ceil(hypotenuse * Math.cos(angle));
@@ -28,8 +31,8 @@
   }
   function translateUnits(node) {
     return _.merge(node, {
-      length: Math.floor(WINDOW_HEIGHT * node.length),
-      thickness: Math.floor(WINDOW_WIDTH * node.thickness)
+      length: Math.floor((WINDOW_HEIGHT/SCALE_Y) * node.length),
+      thickness: Math.ceil((WINDOW_WIDTH/SCALE_X) * node.thickness)
     });
   }
 
@@ -43,38 +46,5 @@
     });
   }
 
-  var root = {
-    length: Math.floor(WINDOW_HEIGHT * 0.7),
-    angle: 0,
-    thickness: Math.floor(WINDOW_WIDTH * 0.5),
-    coordinates: {
-      x: Math.floor($(window).width() / 2),
-      y: Math.ceil($(window).height())
-    },
-    children: [
-      {
-        length:0.3,
-        angle: Math.PI/3,
-        thickness:0.01,
-        children: [
-          {
-            length: 0.5,
-            angle: Math.PI/5,
-            thickness: 0.01
-          }
-        ]
-      },
-      {
-        length:0.253,
-        angle: Math.PI/2,
-        thickness:0.0132
-      },
-      {
-        length:0.1,
-        angle: Math.PI/4,
-        thickness:0.005
-      }
-    ]
-  };
-  drawTree(root);
+  return drawTree;
 }());
