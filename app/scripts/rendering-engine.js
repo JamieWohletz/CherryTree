@@ -48,6 +48,11 @@ const renderTree =
       var xOffset = getXOffset(node, parent, orderInSiblings);
       context.translate(xOffset, 0);
       context.moveTo(0,0);
+
+      context.beginPath();
+      context.arc(0, 0, node.thickness / 2, 0, 2 * Math.PI, false);
+      context.fill();
+
       context.lineTo(-node.thickness/2, 0);
       context.quadraticCurveTo(-node.thickness/2 , -node.length/2, -node.thickness/2, -node.length);
       context.lineTo(node.thickness/2, -node.length);

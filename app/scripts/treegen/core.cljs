@@ -22,11 +22,13 @@
 (defn get-num-child-nodes []
   (rand-int-in-range min-num-child-nodes max-num-child-nodes))
 
-(defn slice-into-random-parts [total num-slices]
+(defn slice-into-random-parts [total num-slices min-slice-percent]
   (if (== 1 num-slices)
     [total]
-    (let [slice-point (rand-num-in-range 0 total)]
-      (conj (slice-into-random-parts (- total slice-point) (- num-slices 1)) slice-point))))
+    (let [min-slice-point (* min-slice-percent total)
+          max-slice-point (* (- 1 min-slice-percent) total)
+          slice-point (rand-num-in-range min-slice-point max-slice-point)]
+      (conj (slice-into-random-parts (- total slice-point) (- num-slices 1) min-slice-percent) slice-point))))
 
 (defn generate-child-nodes [create-node]
   (let [num-nodes (get-num-child-nodes)]
@@ -63,7 +65,7 @@
 (defn add-thickness [tree root-thickness]
   (add-property-to-tree tree :thickness root-thickness
                         (fn [{:keys [parent-value num-children parent children]}]
-                          (slice-into-random-parts parent-value num-children))))
+                          (slice-into-random-parts parent-value num-children 0.2))))
 
 (defn add-angle [tree root-angle]
   (add-property-to-tree tree :angle root-angle
