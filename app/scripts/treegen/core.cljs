@@ -57,21 +57,21 @@
   (add-property-to-tree tree :length root-length
                         (fn [{:keys [parent-value num-children parent children]}]
                           (repeatedly num-children
-                                      #(clamp (rand-num-in-range (- parent-value max-length-difference)
-                                                                 (- parent-value 0.01))
-                                              0.001
-                                              1)))))
+                                      #(+ (/ (:thickness parent) 3) (clamp (rand-num-in-range (- parent-value max-length-difference)
+                                                                    (- parent-value 0.01))
+                                                 0.1
+                                                 1))))))
 
 (defn add-thickness [tree root-thickness]
   (add-property-to-tree tree :thickness root-thickness
                         (fn [{:keys [parent-value num-children parent children]}]
-                          (slice-into-random-parts parent-value num-children 0.2))))
+                          (slice-into-random-parts parent-value num-children 0.3))))
 
 (defn add-angle [tree root-angle]
   (add-property-to-tree tree :angle root-angle
                         (fn [{:keys [parent-value num-children parent children]}]
                           (repeatedly num-children
-                                      #(rand-num-in-range 0 (/ js/Math.PI 6))))))
+                                      #(rand-num-in-range (- (/ js/Math.PI 6)) (/ js/Math.PI 6))))))
 
 (defn generate-tree* [num-levels]
   (add-length
