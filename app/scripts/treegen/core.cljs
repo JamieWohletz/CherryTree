@@ -48,10 +48,9 @@
 
 (defn generate-naked-tree [num-levels]
   (if (== num-levels 1)
-    {:children (generate-child-nodes (fn [] (do
-                                              ;(println "created node")
-                                              {})))}
-    {:children (generate-child-nodes (fn [] (generate-naked-tree (- num-levels 1))))}))
+    {:children (generate-child-nodes (fn [] {:level num-levels}))}
+    {:children (generate-child-nodes (fn [] (generate-naked-tree (dec num-levels))))
+     :level num-levels}))
 
 (defn add-property-to-tree [{:keys [children] :as tree} property root-value get-children-values]
   (if (empty? children)
@@ -87,9 +86,11 @@
 (defn add-angle [tree root-angle]
   (add-property-to-tree tree :angle root-angle
                         (fn [{:keys [parent-value num-children parent children]}]
-                          (sort                             ;sort to keep branches from overlapping when they have opposing angles
-                            (repeatedly num-children
-                                        #(rand-num-in-range (- (/ js/Math.PI 6)) (/ js/Math.PI 6)))))))
+                          (let [angle-modifier (clamp (:level parent) 5 10)] ;generate straighter trees by having smaller angles on lower branches
+                            (sort                            ;sort to keep branches from overlapping when they have opposing angles
+                             (repeatedly num-children
+                                         #(rand-num-in-range (- (/ js/Math.PI angle-modifier))
+                                                             (/ js/Math.PI angle-modifier))))))))
 
 (defn generate-tree* [num-levels]
   (add-length
