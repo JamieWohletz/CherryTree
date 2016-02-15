@@ -60,7 +60,7 @@
   (add-property-to-tree tree :angle root-angle
                         (fn [parent-angle num-children]
                           (repeatedly num-children
-                                      #(rand-num-in-range 0 js/Math.PI)))))
+                                      #(rand-num-in-range 0 (/ js/Math.PI 6))))))
 
 (defn generate-tree [num-levels]
   (clj->js
@@ -69,5 +69,5 @@
         (add-angle
           (generate-naked-tree num-levels)
           (/ js/Math.PI 2))
-        (/ js/RENDER.VIEWBOX_WIDTH 10))
+        (/ 1 js/RENDER.X_SCALE))
       1)))
