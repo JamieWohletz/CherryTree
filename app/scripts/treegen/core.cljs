@@ -7,7 +7,7 @@
 (def min-num-child-nodes 1)
 (def max-num-child-nodes 3)
 (def max-length-difference 0.2)
-(def max-thickness-difference 0.01)
+(def max-thickness-difference 0.5)
 (def angle-arc-range 180)
 
 (defn rand-num-in-range [start end]
@@ -20,7 +20,7 @@
   (rand-int-in-range min-num-child-nodes max-num-child-nodes))
 
 (defn slice-into-random-parts [total num-slices]
-  (if (== 0 num-slices)
+  (if (== 1 num-slices)
     [total]
     (let [slice-point (rand-num-in-range 0 total)]
       (conj (slice-into-random-parts (- total slice-point) (- num-slices 1)) slice-point))))
@@ -32,7 +32,7 @@
 (defn generate-naked-tree [num-levels]
   (if (== num-levels 1)
     {:children (generate-child-nodes (fn [] (do (println "created node")
-                                              {})))}
+                                                {})))}
     {:children (generate-child-nodes (fn [] (generate-naked-tree (- num-levels 1))))}))
 
 (defn add-property-to-tree [{:keys [children] :as tree} property root-value get-children-values]
@@ -63,4 +63,11 @@
                                       #(rand-num-in-range 0 js/Math.PI)))))
 
 (defn generate-tree [num-levels]
-  (clj->js (add-length (add-thickness (add-angle (generate-naked-tree num-levels) 0) 1) 1)))
+  (clj->js
+    (add-length
+      (add-thickness
+        (add-angle
+          (generate-naked-tree num-levels)
+          (/ js/Math.PI 2))
+        (/ js/RENDER.VIEWBOX_WIDTH 10))
+      1)))
