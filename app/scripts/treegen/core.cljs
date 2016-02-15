@@ -19,6 +19,18 @@
 (defn clamp [num lower upper]
   (. js/_ clamp num lower upper))
 
+(defn ceil [num]
+  (js/Math.ceil num))
+
+(defn sort-middle
+  "Sort the numbers in coll such that the largest value is in the middle with decreasing values on the left and right"
+  [coll]
+  (let [half (int (/ (count coll) 2))
+        left (sort (subvec coll 0 half))
+        right (reverse (sort (subvec coll half)))
+        sorted (concat left right)]
+    sorted))
+
 (defn get-num-child-nodes []
   (rand-int-in-range min-num-child-nodes max-num-child-nodes))
 
@@ -53,25 +65,31 @@
                         children children-values)]
       (assoc tree property root-value :children children))))
 
+
+(defn gen-length [{:keys [parent-value num-children parent children]}]
+  (clamp (rand-num-in-range (- parent-value 0.2)
+                            (+ (- parent-value 0.02) (:thickness parent)))
+          0.1
+          1))
+
+(defn gen-lengths [{:keys [parent-value num-children parent children] :as args}]
+  (repeatedly num-children #(gen-length args)))
+
 (defn add-length [tree root-length]
-  (add-property-to-tree tree :length root-length
-                        (fn [{:keys [parent-value num-children parent children]}]
-                          (repeatedly num-children
-                                      #(+ (/ (:thickness parent) 3) (clamp (rand-num-in-range (- parent-value max-length-difference)
-                                                                    (- parent-value 0.01))
-                                                 0.1
-                                                 1))))))
+  (add-property-to-tree tree :length root-length gen-lengths))
 
 (defn add-thickness [tree root-thickness]
   (add-property-to-tree tree :thickness root-thickness
                         (fn [{:keys [parent-value num-children parent children]}]
-                          (slice-into-random-parts parent-value num-children 0.3))))
+                          (sort-middle                      ;keep the thickest branch in the middle
+                            (slice-into-random-parts parent-value num-children 0.3)))))
 
 (defn add-angle [tree root-angle]
   (add-property-to-tree tree :angle root-angle
                         (fn [{:keys [parent-value num-children parent children]}]
-                          (repeatedly num-children
-                                      #(rand-num-in-range (- (/ js/Math.PI 6)) (/ js/Math.PI 6))))))
+                          (sort                             ;sort to keep branches from overlapping when they have opposing angles
+                            (repeatedly num-children
+                                        #(rand-num-in-range (- (/ js/Math.PI 6)) (/ js/Math.PI 6)))))))
 
 (defn generate-tree* [num-levels]
   (add-length

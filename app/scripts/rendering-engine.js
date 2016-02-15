@@ -49,9 +49,13 @@ const renderTree =
       context.translate(xOffset, 0);
       context.moveTo(0,0);
 
+      //draw a circle between branch joints to fill them in
+      var halfThickness = (node.thickness / 2);
       context.beginPath();
-      context.arc(0, 0, node.thickness / 2, 0, 2 * Math.PI, false);
+      context.arc(0, 0, halfThickness + 0.2, 0, 2 * Math.PI, false);
       context.fill();
+      context.closePath();
+      context.moveTo(0,0);
 
       context.lineTo(-node.thickness/2, 0);
       context.quadraticCurveTo(-node.thickness/2 , -node.length/2, -node.thickness/2, -node.length);
@@ -62,7 +66,7 @@ const renderTree =
 
       _.each(node.children, function(child, index) {
         context.save();
-        context.rotate(index % 2 === 0 ? -child.angle : child.angle);
+        context.rotate(child.angle);
         drawTree(child, node, index);
         context.restore();
       });
