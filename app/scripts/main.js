@@ -1,2 +1,2 @@
-var tree = treegen.core.generate_tree(10);
+var tree = treegen.core.generate_tree(11);
 renderTree(tree);

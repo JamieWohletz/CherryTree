@@ -3,5 +3,6 @@
  */
 const RENDER = {
   X_SCALE: 5,
-  Y_SCALE: 8
+  Y_SCALE: 10,
+  BLOSSOM_SIZE: 16
 };

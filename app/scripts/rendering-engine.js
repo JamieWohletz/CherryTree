@@ -7,6 +7,7 @@ const renderTree =
     const context = canvas.getContext('2d');
     const winW = $(window).width();
     const winH = $(window).height();
+    let cherryBlossomImage;
 
     canvas.width = winW;
     canvas.height = winH;
@@ -61,8 +62,18 @@ const renderTree =
       context.lineTo(halfThickness, -node.length);
       context.quadraticCurveTo(halfThickness / 2, -node.length / 2, halfThickness, 0);
       context.fill();
-      context.translate(0, -node.length);
 
+      context.translate(0, -node.length);
+      if(!node.children) {
+        context.drawImage(
+          cherryBlossomImage,
+          -RENDER.BLOSSOM_SIZE/2,
+          -RENDER.BLOSSOM_SIZE/2,
+          RENDER.BLOSSOM_SIZE,
+          RENDER.BLOSSOM_SIZE
+        );
+        return;
+      }
       _.each(node.children, function(child, index) {
         context.save();
         context.rotate(child.angle);
@@ -71,5 +82,9 @@ const renderTree =
       });
     }
 
-    return drawTree;
+    return function(node){
+      cherryBlossomImage = new Image();
+      cherryBlossomImage.src = './images/cherryblossom.png';
+      cherryBlossomImage.onload = drawTree.bind(this, node);
+    };
   }());
