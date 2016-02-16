@@ -5,3 +5,6 @@ Tree node interface:
     angle: <float>,
     children: <array>
 }
+
+to compile the cljs file:
+lein cljsbuild once

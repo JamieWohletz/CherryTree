@@ -5,9 +5,7 @@
     "bootstrap-sass": "~3.3.5",
     "modernizr": "~2.8.1",
     "lodash": "^4.3.0",
-    "snap": "*",
-    "svg.js": "^2.2.5",
-    "seamless-immutable": "^5.1.0"
+    "snap": "*"
   },
   "overrides": {
     "bootstrap-sass": {

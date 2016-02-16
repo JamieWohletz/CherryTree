@@ -10,59 +10,58 @@ const renderTree =
 
     canvas.width = winW;
     canvas.height = winH;
-    context.translate(canvas.width/2,canvas.height);
+    context.translate(canvas.width / 2, canvas.height);
     context.lineCap = 'round';
     context.lineJoin = 'round';
 
     function scaleScalars(node) {
-      node.length = Math.floor(node.length * canvas.height/RENDER.Y_SCALE);
-      node.thickness = Math.ceil(node.thickness * canvas.width/RENDER.X_SCALE);
+      node.length = Math.floor(node.length * canvas.height / RENDER.Y_SCALE);
+      node.thickness = Math.ceil(node.thickness * canvas.width / RENDER.X_SCALE);
     }
 
     function getXOffset(node, parent, orderInSiblings) {
-      if(!parent || !node || !node.thickness){
+      let totalLeftThickness;
+
+      if (!parent || !node || !node.thickness) {
         return 0;
       }
 
-      var leftSiblingsThicknesses = _.map(_.slice(parent.children, 0, orderInSiblings),
-                                      (siblingNode) => { return siblingNode.thickness });
+      totalLeftThickness = _.chain(parent.children)
+                            .slice(0, orderInSiblings)
+                            .map((o)=>{return o.thickness})
+                            .reduce(_.add)
+                            .value() || 0;
 
-      //add up the thickness of all the siblings to the left of this node
-      var totalLeftThickness = 0;
-      if(leftSiblingsThicknesses.length > 0) {
-        totalLeftThickness = _.reduce(leftSiblingsThicknesses,
-          (total, thickness) => {
-            return total + thickness;
-          }, 0);
-      }
-
-      //add half of this node's thickness
-      var xPos = (-parent.thickness / 2) + (totalLeftThickness + (node.thickness / 2));
-      return xPos;
+      //the x offset is the thickness of all the preceeding nodes plus half this node's
+      //thickness so that we can start drawing from the centerpoint
+      return (-parent.thickness / 2) + (totalLeftThickness + (node.thickness / 2));
     }
 
     function drawTree(node, parent = null, orderInSiblings = 0) {
+      let xOffset, halfThickness;
+
       scaleScalars(node);
+
       context.lineWidth = node.thickness;
       context.beginPath();
-      var xOffset = getXOffset(node, parent, orderInSiblings);
+      xOffset = getXOffset(node, parent, orderInSiblings);
       context.translate(xOffset, 0);
-      context.moveTo(0,0);
-
+      context.moveTo(0, 0);
       //draw a circle between branch joints to fill them in
-      var halfThickness = (node.thickness / 2);
+      halfThickness = (node.thickness / 2);
       context.beginPath();
       context.arc(0, 0, halfThickness + 0.2, 0, 2 * Math.PI, false);
       context.fill();
       context.closePath();
-      context.moveTo(0,0);
 
-      context.lineTo(-node.thickness/2, 0);
-      context.quadraticCurveTo(-node.thickness/2 , -node.length/2, -node.thickness/2, -node.length);
-      context.lineTo(node.thickness/2, -node.length);
-      context.quadraticCurveTo(node.thickness/2, -node.length/2, node.thickness/2, 0);
+      context.beginPath();
+      context.moveTo(0, 0);
+      context.lineTo(-halfThickness, 0);
+      context.quadraticCurveTo(-halfThickness / 2, -node.length / 2, -halfThickness, -node.length);
+      context.lineTo(halfThickness, -node.length);
+      context.quadraticCurveTo(halfThickness / 2, -node.length / 2, halfThickness, 0);
       context.fill();
-      context.translate(0,-node.length);
+      context.translate(0, -node.length);
 
       _.each(node.children, function(child, index) {
         context.save();
