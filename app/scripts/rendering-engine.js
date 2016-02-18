@@ -48,6 +48,7 @@ const renderTree =
       xOffset = getXOffset(node, parent, orderInSiblings);
       context.translate(xOffset, 0);
       context.moveTo(0, 0);
+
       //draw a circle between branch joints to fill them in
       halfThickness = (node.thickness / 2);
       context.beginPath();
